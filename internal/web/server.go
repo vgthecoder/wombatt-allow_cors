@@ -17,6 +17,10 @@ import (
 	"golang.org/x/exp/maps"
 )
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 type page map[string]any
 
 type Server struct {
@@ -97,6 +101,7 @@ func (ls *Server) Publish(name string, data any) {
 }
 
 func (ls *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w);
 	path := r.URL.Path
 	ls.pagesLock.RLock()
 	page, ok := ls.pages[path]
